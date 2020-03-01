@@ -1,1 +1,1 @@
-worker: python !NICK2.py
+worker: python Korea DISCORD STORE.py
