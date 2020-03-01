@@ -1,8 +1,8 @@
 import discord
 import asyncio
+import os
 
 client = discord.Client()
-token = 'NjgzNDgzMDE0NTA4MDUyNjI4.XlsNOw.d7fXPIgFtkeXhGMOYiS9oZp8HhQ'
 
 @client.event
 async def on_ready():
@@ -33,7 +33,6 @@ async def on_message(message):
                     await i.send(embed=embed)
         else:
             await message.channel.send('사용이 불가한 커맨드')
-
     if message.content == '!출근':
         if message.author.id ==527084544525074432 or message.author.id == 581396513108918295:
             embed=discord.Embed(title='정상 출근처리되셧습니다', color=0xff00, timestamp=message.created_at)
@@ -55,5 +54,21 @@ async def on_message(message):
         role = discord.utils.get(message.guild.roles, name="😁ㅣ손님ㅣ😁")
         await author.add_roles(role)
         await message.channel.send('인증이완료되었습니다')
+            
+async def my_background_task():
+    await client.wait_until_ready()
+    while not client.is_closed():
+        game = discord.Game("벤츠서버 질문받는중")
+        await client.change_presence(status=discord.Status.online, activity=game)
+        await asyncio.sleep(5)
+        game = discord.Game(f'{len(client.guilds)}개의 서버에 참여중')
+        await client.change_presence(status=discord.Status.online, activity=game)
+        await asyncio.sleep(5)
+        game = discord.Game(f'{len(client.users)}명의 유저들과 소통하는중')
+        await client.change_presence(status=discord.Status.online, activity=game)
+        await asyncio.sleep(5)
+client.loop.create_task(my_background_task())
 
-client.run(token)
+
+access_token = os.environ["BOT_TOKEN"]        
+client.run(access_token)
